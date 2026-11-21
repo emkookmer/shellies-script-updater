@@ -1,0 +1,17 @@
+{
+  "config": {
+    "abort": {
+      "already_configured": "Shellies Script Updater is already configured."
+    }
+  },
+  "entity": {
+    "update": {
+      "gen1": {
+        "name": "Shellies Discovery"
+      },
+      "gen2": {
+        "name": "Shellies Discovery Gen2+"
+      }
+    }
+  }
+}

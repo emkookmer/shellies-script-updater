@@ -1,0 +1,16 @@
+{
+  "domain": "shellies_script_updater",
+  "name": "Shellies Script Updater",
+  "categories": [
+    "diy_makers"
+  ],
+  "codeowners": [
+    "@emkookmer"
+  ],
+  "config_flow": true,
+  "documentation": "https://github.com/emkookmer/shellies-script-updater#readme",
+  "integration_type": "service",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/emkookmer/shellies-script-updater/issues",
+  "version": "1.0.0"
+}
