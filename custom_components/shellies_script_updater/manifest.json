@@ -8,6 +8,10 @@
     "@emkookmer"
   ],
   "config_flow": true,
+  "dependencies": [
+    "mqtt",
+    "python_script"
+  ],
   "documentation": "https://github.com/emkookmer/shellies-script-updater#readme",
   "integration_type": "service",
   "iot_class": "cloud_polling",
