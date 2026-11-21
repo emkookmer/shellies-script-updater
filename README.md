@@ -32,7 +32,7 @@ For a new setup, install the script you need from **Settings → System → Upda
 
 ## How updates work
 
-The integration checks the two GitHub repositories at startup and every six hours. Each script has its own update entry. Choosing **Install** downloads the selected stable release archive, verifies its SHA-256 digest, and replaces the matching script file. Earlier versions are available from the upstream release pages.
+The integration checks the two GitHub repositories at startup and every six hours. Each script has its own update entry. Choosing **Install** downloads the selected stable release archive, verifies its SHA-256 digest, and replaces the matching script file. Updates preserve the file’s existing read, write, and execute permissions. New script files use `0644` (owner read and write, everyone else read). Earlier versions are available from the upstream release pages.
 
 - [Shellies Discovery releases](https://github.com/bieniu/ha-shellies-discovery/releases)
 - [Shellies Discovery Gen2+ releases](https://github.com/bieniu/ha-shellies-discovery-gen2/releases)

@@ -81,7 +81,9 @@ class ScriptCoordinator(DataUpdateCoordinator[ScriptStatus]):
         """Check GitHub and reconcile the version with the file on disk."""
         async with self.lock:
             try:
-                content = await self.hass.async_add_executor_job(_read_script, self.path)
+                content, _ = await self.hass.async_add_executor_job(
+                    _read_script, self.path
+                )
                 installed = await self._async_record_version(content)
                 release = await async_latest_release(self.session, self.script)
             except (ClientError, OSError, TimeoutError, ValueError, KeyError, TypeError) as err:
@@ -156,33 +158,33 @@ class ScriptCoordinator(DataUpdateCoordinator[ScriptStatus]):
                     _LOGGER.warning("Could not reload Python Scripts: %s", err)
 
 
-def _read_script(path: Path) -> bytes | None:
-    """Read a bounded, regular local script without following symlinks."""
+def _read_script(path: Path) -> tuple[bytes | None, int]:
+    """Read a regular script and its permissions, or return the mode for a new file."""
     if path.parent.is_symlink():
         raise ValueError(f"{path.parent} must be a regular directory")
     try:
         mode = path.lstat().st_mode
     except FileNotFoundError:
-        return None
+        return None, 0o644
     if not S_ISREG(mode):
         raise ValueError(f"{path} must be a regular file")
     with path.open("rb") as source:
         content = source.read(MAX_BYTES + 1)
     if len(content) > MAX_BYTES:
         raise ValueError(f"{path} exceeds the supported size limit")
-    return content
+    return content, mode & 0o777
 
 
 def _install_script(path: Path, content: bytes, version: str) -> None:
     """Atomically replace the script after checking its installed version."""
-    previous = _read_script(path)
+    previous, mode = _read_script(path)
     if previous == content:
         return
     installed = script_version(previous) if previous is not None else None
     if installed and _version_parts(installed) > _version_parts(version):
         raise ValueError(f"The installed script version {installed} is newer than {version}")
     path.parent.mkdir(exist_ok=True)
-    _atomic_write(path, content)
+    _atomic_write(path, content, mode)
 
 
 def _version_parts(version: str) -> tuple[int, ...]:
@@ -190,13 +192,14 @@ def _version_parts(version: str) -> tuple[int, ...]:
     return tuple(int(part) for part in version.removeprefix("v").split("."))
 
 
-def _atomic_write(path: Path, content: bytes) -> None:
-    """Stage a complete file on the same filesystem before replacing it."""
+def _atomic_write(path: Path, content: bytes, mode: int) -> None:
+    """Set permissions on the staged file before replacing the original."""
     with NamedTemporaryFile(dir=path.parent, delete=False) as staged:
         temporary = Path(staged.name)
         try:
             staged.write(content)
             staged.close()
+            temporary.chmod(mode)
             os.replace(temporary, path)
         finally:
             temporary.unlink(missing_ok=True)
