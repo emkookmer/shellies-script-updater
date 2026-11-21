@@ -2,6 +2,12 @@
   "config": {
     "abort": {
       "already_configured": "Shellies Script Updater is already configured."
+    },
+    "step": {
+      "user": {
+        "title": "Set up Shellies Script Updater",
+        "description": "Detect installed Shellies Discovery scripts and check for updates."
+      }
     }
   },
   "entity": {
