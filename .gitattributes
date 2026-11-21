@@ -1,0 +1,19 @@
+###########################################
+### adding Gitify default gitattributes ###
+###########################################
+*   text    eol=lf
+*.png   binary
+*.jpg   binary
+*.ico   binary
+*.svg   binary
+*.otf   binary
+*.eot   binary
+*.ttf   binary
+*.woff  binary
+*.woff2 binary
+*.pdf   binary
+*.doc   binary
+*.docx  binary
+*.wmv   binary
+*.mp4   binary
+*.xz filter=lfs diff=lfs merge=lfs -text

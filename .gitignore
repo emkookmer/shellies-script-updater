@@ -1,0 +1,39 @@
+# windows thumbnail cache
+Thumbs.db
+
+# ignoring Mac OSX files
+*.DS_Store
+
+# ignore ant build resutls
+build
+
+# ignore the merge files
+*.orig
+*.BASE
+*.LOCAL
+*.REMOTE
+
+# Log files
+*.log
+
+# Unit test reports
+TEST*.xml
+
+# Applications
+*.app
+*.exe
+*.war
+
+# Large media files
+*.mp4
+*.tiff
+*.avi
+*.flv
+*.mov
+*.wmv
+*.disabled
+
+# project ignores
+__pycache__/
+*.py[cod]
+.venv/
